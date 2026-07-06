@@ -1,4 +1,3 @@
-'use client';
 
 /**
  * StickyHeader — animated header that reacts to scroll position.
