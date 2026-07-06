@@ -1,0 +1,327 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Design tokens ────────────────────────────────────────────────────────── */
+/*
+ * All custom colors are CSS-variable-backed so dark mode variants never
+ * require raw hex values — the Tailwind @theme block maps them to utility
+ * classes automatically. Choice: indigo accent on neutral base (per plan).
+ */
+
+:root {
+  /* Backgrounds */
+  --bg-base: oklch(99% 0 0);
+  --bg-subtle: oklch(97% 0 0);
+  --bg-card: oklch(100% 0 0);
+
+  /* Foregrounds */
+  --fg-base: oklch(10% 0 0);
+  --fg-muted: oklch(45% 0 0);
+  --fg-subtle: oklch(65% 0 0);
+
+  /* Borders */
+  --border-base: oklch(90% 0 0);
+  --border-subtle: oklch(94% 0 0);
+
+  /* Accent — indigo; used only on CTAs, active badges, and story links */
+  --accent: oklch(0.97 0 0);
+  --accent-hover: oklch(52% 0.19 264);
+  --accent-muted: oklch(94% 0.06 264);
+  --accent-fg: oklch(99% 0 0);
+
+  /* Network canvas node color */
+  --node-color: oklch(57% 0.18 264);
+  --node-edge: oklch(80% 0.06 264);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --bg-base: oklch(8% 0 0);
+  --bg-subtle: oklch(11% 0 0);
+  --bg-card: oklch(12% 0 0);
+
+  --fg-base: oklch(97% 0 0);
+  --fg-muted: oklch(65% 0 0);
+  --fg-subtle: oklch(45% 0 0);
+
+  --border-base: oklch(22% 0 0);
+  --border-subtle: oklch(18% 0 0);
+
+  --accent: oklch(0.269 0 0);
+  --accent-hover: oklch(72% 0.19 264);
+  --accent-muted: oklch(18% 0.08 264);
+  --accent-fg: oklch(99% 0 0);
+
+  --node-color: oklch(67% 0.18 264);
+  --node-edge: oklch(30% 0.08 264);
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* ── Tailwind v4 theme mapping ───────────────────────────────────────────── */
+@theme inline {
+  --color-bg-base: var(--bg-base);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-bg-card: var(--bg-card);
+
+  --color-fg-base: var(--fg-base);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+
+  --color-border-base: var(--border-base);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-fg: var(--accent-fg);
+
+  --color-node: var(--node-color);
+  --color-node-edge: var(--node-edge);
+
+  --font-display: var(--font-syne);
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ── Base styles ─────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--fg-base);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Utility: visually hide content without display:none (a11y) ────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ── Scrim gradient for hero legibility in both themes ───────────────────── */
+/*   Uses a radial gradient so text center is clearest; no raw hex values.   */
+.hero-scrim {
+  background: radial-gradient(
+    ellipse 60% 55% at 50% 50%,
+    color-mix(in oklch, var(--bg-base) 70%, transparent) 0%,
+    color-mix(in oklch, var(--bg-base) 30%, transparent) 60%,
+    transparent 100%
+  );
+}
+
+/* ── Category badge color map (semantic, dark-safe) ─────────────────────── */
+.badge-energy-intensive {
+  background-color: color-mix(in oklch, oklch(65% 0.18 25) 15%, transparent);
+  color: oklch(45% 0.18 25);
+  border-color: color-mix(in oklch, oklch(65% 0.18 25) 30%, transparent);
+}
+.dark .badge-energy-intensive {
+  background-color: color-mix(in oklch, oklch(65% 0.18 25) 20%, transparent);
+  color: oklch(75% 0.18 25);
+}
+
+.badge-capital-secured {
+  background-color: color-mix(in oklch, oklch(65% 0.16 145) 15%, transparent);
+  color: oklch(40% 0.16 145);
+  border-color: color-mix(in oklch, oklch(65% 0.16 145) 30%, transparent);
+}
+.dark .badge-capital-secured {
+  background-color: color-mix(in oklch, oklch(65% 0.16 145) 20%, transparent);
+  color: oklch(75% 0.16 145);
+}
+
+.badge-high-throughput {
+  background-color: color-mix(in oklch, oklch(65% 0.17 200) 15%, transparent);
+  color: oklch(38% 0.17 200);
+  border-color: color-mix(in oklch, oklch(65% 0.17 200) 30%, transparent);
+}
+.dark .badge-high-throughput {
+  background-color: color-mix(in oklch, oklch(65% 0.17 200) 20%, transparent);
+  color: oklch(75% 0.17 200);
+}
+
+.badge-permissioned {
+  background-color: color-mix(in oklch, oklch(60% 0.14 290) 15%, transparent);
+  color: oklch(38% 0.14 290);
+  border-color: color-mix(in oklch, oklch(60% 0.14 290) 30%, transparent);
+}
+.dark .badge-permissioned {
+  background-color: color-mix(in oklch, oklch(60% 0.14 290) 20%, transparent);
+  color: oklch(72% 0.14 290);
+}
+
+.badge-energy-light {
+  background-color: color-mix(in oklch, oklch(65% 0.16 130) 15%, transparent);
+  color: oklch(38% 0.16 130);
+  border-color: color-mix(in oklch, oklch(65% 0.16 130) 30%, transparent);
+}
+.dark .badge-energy-light {
+  background-color: color-mix(in oklch, oklch(65% 0.16 130) 20%, transparent);
+  color: oklch(72% 0.16 130);
+}
+
+.badge-fast-finality {
+  background-color: color-mix(in oklch, oklch(65% 0.18 264) 15%, transparent);
+  color: oklch(40% 0.18 264);
+  border-color: color-mix(in oklch, oklch(65% 0.18 264) 30%, transparent);
+}
+.dark .badge-fast-finality {
+  background-color: color-mix(in oklch, oklch(65% 0.18 264) 20%, transparent);
+  color: oklch(72% 0.18 264);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: color-mix(in oklch, var(--ring) 50%, transparent);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+  html {
+    font-family: var(--font-sans);
+  }
+}
+
+/* ── Ripple animation for AlgorithmCard click effect ─────────────────────── */
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
+.animate-ripple {
+  animation: ripple-expand 0.7s cubic-bezier(0, 0.55, 0.45, 1) forwards;
+}
+
+/* ── Custom cursor ───────────────────────────────────────────────────────── */
+.cursor-dot {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  mix-blend-mode: difference;
+}
