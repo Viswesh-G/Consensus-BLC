@@ -6,6 +6,8 @@
  * - Logo does a subtle scale-up pop on first render
  */
 
+"use client"
+
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Hexagon } from 'lucide-react';
