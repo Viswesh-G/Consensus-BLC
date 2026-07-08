@@ -6,7 +6,7 @@ hero:
   headlineLine1: "How Blockchains"
   headlineLine2: "Agree"
   subhead: "Every blockchain makes a different bet on decentralization, security, and speed. Explore the consensus mechanisms that define them."
-  cta: "Explore 10 mechanisms"
+  cta: "Explore 8 mechanisms"
 
 overview:
   trilemmaEyebrow: "The blockchain trilemma"
@@ -25,7 +25,7 @@ overview:
 
 grid:
   title: "The Mechanisms"
-  description: "Ten distinct approaches to solving the Byzantine Generals Problem. Hover over any mechanism to see how it works under the hood."
+  description: "Eight distinct approaches to solving the Byzantine Generals Problem. Hover over any mechanism to see how it works under the hood."
   cta: "Read the full story"
 
 detailPage:
@@ -33,6 +33,8 @@ detailPage:
   placeholderHeading: "Full breakdown coming soon"
   placeholderBody: "This space is reserved for the interactive mechanism diagram, visual timeline, and deep-dive explanation."
   adoptersHeading: "Notable Adopters"
+  coinsHeading: "Layer 1 & Layer 2 Coins"
+  tradeoffsHeading: "Trade-off Analysis"
   exploreMoreHeading: "Explore more"
 
 algorithms:
@@ -41,68 +43,366 @@ algorithms:
     category: "Energy Intensive"
     icon: "Pickaxe"
     shortTagline: "The original consensus. Miners compete to solve cryptographic puzzles."
-    hoverDescription: "Nodes (miners) expend computational energy to find a hash below a target difficulty. The longest chain becomes the canonical truth, securing the network through pure thermodynamic cost."
+    hoverDescription: "This consensus algorithm is used to select a miner for the next block generation. The central idea behind this algorithm is to solve a complex mathematical puzzle and easily give out a solution. This mathematical puzzle requires a lot of computational power and thus, the node who solves the puzzle as soon as possible gets to mine the next block."
+    detailDescription: |
+      1. Transaction Collection
+      Users initiate cryptocurrency transactions across the blockchain network. These pending transactions are collected and grouped into a candidate block by miners.
+
+      2. Block Verification
+      Before a block can be added, miners verify that the included transactions are legitimate according to network rules. This stage ensures that invalid transfers, duplicate spending attempts or malformed transactions are rejected.
+
+      3. Solving the Mathematical Puzzle
+      After verification, miners begin solving a computational puzzle. The puzzle requires finding a specific value that produces a hash meeting predefined network conditions. Miners repeatedly test different inputs until a valid result is discovered.
+
+      4. Block Broadcasting
+      When a miner finds the correct solution, the newly created block is broadcast to the network. Other nodes quickly verify the solution. If accepted, the block becomes part of the blockchain ledger.
+
+      5. Reward Distribution
+      The successful miner receives a mining reward, which commonly includes newly created cryptocurrency coins and transaction fees included in the block.
+
+      Mining in Proof of Work
+      Mining is the operational process behind Proof of Work. Miners are specialized participants that use computing hardware to perform the calculations required to solve blockchain puzzles. Because solving the puzzle requires significant computational effort, dishonest behavior becomes expensive and impractical. In PoW systems, mining serves two important roles — securing the network and creating and validating new blocks.
+
+      Energy and Time Consumption in Mining
+      The most resource-intensive part of Proof of Work is not transaction verification but puzzle solving. Mining also requires time. For example, Bitcoin is designed to produce approximately one block every 10 minutes. If blocks begin appearing too quickly due to increased mining power, the network adjusts the mining difficulty to maintain a stable block generation rate. This process consumes electricity, computing power, specialized hardware resources, and significant operational costs.
+
+      Mining Rewards in PoW Networks
+      Proof of Work networks reward miners for securing the blockchain. In Bitcoin, the reward mechanism includes newly issued bitcoins along with transaction fees. An important characteristic of Bitcoin's reward model is halving — approximately every four years, the block reward is reduced by half. This gradual reduction limits new coin creation and contributes to Bitcoin's fixed supply model. Over time, block rewards decrease while transaction fees become increasingly important for miner incentives.
     adopters: "Bitcoin, Dogecoin, Litecoin"
+    layer1Coins: "Bitcoin (BTC), Litecoin (LTC), Dogecoin (DOGE), Monero (XMR), Bitcoin Cash (BCH)"
+    layer2Coins: "Lightning Network (Bitcoin L2)"
+    tradeoffs:
+      decentralization:
+        score: 9
+        why: "Anyone with mining hardware can participate, making entry relatively open. However, industrial mining pools now control large fractions of hash power, gradually eroding true decentralization."
+      immutability:
+        score: 10
+        why: "Altering past blocks requires redoing all proof-of-work from that point forward — thermodynamically and economically prohibitive at scale, making PoW the gold standard for immutability."
+      transparency:
+        score: 9
+        why: "All transactions and blocks are publicly verifiable on-chain. Mining activity, hash rates and block rewards are fully auditable by any network participant."
+      security:
+        score: 10
+        why: "A 51% attack requires acquiring more than half the global hash rate. On large networks like Bitcoin, this is astronomically expensive, making successful attacks practically impossible."
+
   - slug: "proof-of-stake"
     name: "Proof of Stake (PoS)"
     category: "Capital Secured"
     icon: "Coins"
     shortTagline: "Validators lock up capital as collateral instead of burning energy."
-    hoverDescription: "Participants deposit native tokens into a smart contract to become validators. They are pseudo-randomly selected to propose and attest to blocks. Malicious behavior results in the 'slashing' (destruction) of their staked capital."
+    hoverDescription: "In this type of consensus algorithm, instead of investing in expensive hardware to solve a complex puzzle, validators invest in the coins of the system by locking up some of their coins as stakes. After that, all the validators will start validating the blocks. Validators will validate blocks by placing a bet on them if they discover a block that they think can be added to the chain. Based on the actual blocks added in the Blockchain, all the validators get a reward proportionate to their bets, and their stake increase accordingly. In the end, a validator is chosen to generate a new block based on its economic stake in the network."
+    detailDescription: |
+      Nodes on a network stake an amount of cryptocurrency to become candidates to validate the new block and earn the fee from it. An algorithm then chooses from the pool of candidates the node which will validate the new block. This selection algorithm combines the quantity of stake with other factors like coin-age based selection and randomization to make the selection fair to everyone on the network.
+
+      Coin-age based selection: The algorithm tracks the time every validator candidate node stays a validator. The older the node becomes, the higher the chances of it becoming the new validator.
+
+      Random Block selection: The validator is chosen with a combination of 'lowest hash value' and 'highest stake'. The node having the best weighted combination of these becomes the new validator.
+
+      A typical PoS based mechanism workflow:
+      1. Nodes make transactions. The PoS algorithm puts all these transactions in a pool.
+      2. All the nodes contending to become validator for the next block raise a stake. This stake is combined with other factors like 'coin-age' or 'randomized block selection' to select the validator.
+      3. The validator verifies all the transactions and publishes the block. The stake remains locked and the forging reward is also not granted yet — so that the nodes on the network can 'OK' the new block.
+      4. If the block is 'OK'-ed, the validator gets the stake back and the reward. If using coin-age based selection, the validator's coin-age is reset to 0, putting it in low-priority for the next election.
+      5. If the block is not verified by other nodes, the validator loses its stake and is marked as 'bad' by the algorithm. The process starts again from step 1.
+
+      Features:
+      Fixed coins in existence — there is only a finite number of coins that always circulate in the network with no new coins created through mining. Transaction fee as reward to minters/forgers — every transaction is charged some fee, accumulated and given to the entity who forges the new block. If the forged block is found fraudulent, the transaction fee is not rewarded and the stake of the validator is also lost (known as slashing).
+
+      Advantages of PoS:
+      Energy-efficient — nodes are not competing against each other, so energy is saved. No complex puzzle needs to be solved as in PoW. Decentralization — rewards are proportional to stake, providing no extra edge to join mining pools, thus promoting decentralization. Security — a person attempting to attack a network must own 51% of the stakes.
+
+      Weaknesses of PoS:
+      Large stake validators — if a group of validator candidates combine and own a significant share of total cryptocurrency, they gain more chances of becoming validators, potentially centralizing the network over time. New technology — PoS is still relatively new and ongoing research continues to find and fix flaws. The 'Nothing at Stake' problem — nodes face little disadvantage if they support multiple blockchains during a fork, potentially preventing consensus from ever being reached.
     adopters: "Ethereum, Cardano, Polkadot"
+    layer1Coins: "Ethereum (ETH), Cardano (ADA), Polkadot (DOT), Tezos (XTZ), Algorand (ALGO)"
+    layer2Coins: "Polygon (MATIC), Arbitrum (ARB), Optimism (OP)"
+    tradeoffs:
+      decentralization:
+        score: 7
+        why: "Open to anyone who can stake, but wealthier validators accumulate more stake over time, gradually concentrating power among large holders and reducing true decentralization."
+      immutability:
+        score: 8
+        why: "Slashing mechanisms punish validators who attempt to rewrite history. However, a large coalition of stakers could theoretically collude to reverse recent blocks, a risk not present in PoW."
+      transparency:
+        score: 8
+        why: "All transactions and validator actions are publicly recorded on-chain. Stake amounts, validator identities and slashing events are fully auditable by any network participant."
+      security:
+        score: 8
+        why: "Attacking requires owning 51% of staked coins — economically devastating to the attacker's own holdings, making attacks largely self-defeating for rational actors."
+
   - slug: "delegated-proof-of-stake"
     name: "Delegated PoS (DPoS)"
     category: "High Throughput"
     icon: "Users"
     shortTagline: "A representative democracy where token holders vote for a small set of delegates."
-    hoverDescription: "To maximize speed, only a fixed number of validators (e.g., 21 in EOS) are permitted to produce blocks. Token holders use their stake to elect these active delegates, allowing for massive transaction throughput at the cost of decentralization."
+    hoverDescription: "This is another type of Proof of Stake consensus algorithm. This type of consensus mechanism depends on the basis of the delegation of votes. The users delegate their votes to other users. Whichever user then mines the block will distribute the rewards to the users who delegated to that particular vote."
+    detailDescription: |
+      DPoS system is maintained by an election system for choosing nodes which verify blocks. These nodes are called "witnesses" or "block producers". In DPoS consensus users can either directly vote or give their voting power to another entity to vote on their behalf.
+
+      Selected witnesses are responsible for creating blocks by verifying transactions. If they verify and sign all transactions in a block, they receive a reward, which is usually shared with those who voted for that witness. If a witness fails to verify all transactions in the given time, the block is missed, all transactions are left unverified and no reward is distributed to that witness. The reward is added up to the reward of the next witness which verifies that block.
+
+      Votes are proportionate to the size of each voter's stake. A user need not have a large stake to enter the top tier of witnesses — votes from users with large stakes can elevate users with relatively small stakes to the top tier of witnesses.
+
+      Witnesses: The number of witnesses in the top tier is capped at a certain number usually in the range of 21–101. These witnesses are responsible for validating transactions and creating blocks, and are in return awarded associated fees. Witnesses can prevent specific transactions from being included in a block but cannot change information of any transaction — making them similar to miners in PoW blockchains.
+
+      Voting is a continuous process and each witness in the top tier is always at risk of being replaced by a user who gets more votes. As the number of applicants for witness grows, competition grows and reputation becomes critical for each witness to remain competitive. A witness is kept in check by the threat of loss of income, locking of stake and reputation score.
+
+      A round in a DPoS blockchain with N block producers follows a round-robin order:
+      1. N block producers get elected from the pool of witness candidates.
+      2. The kth block producer signs the kth block, until k=N.
+      3. A block is finalized when it is voted on by (2/3 + 1) of block producers. A block added cannot be reversed.
+
+      Delegates: Users in DPoS systems also vote for a group of delegates who oversee blockchain governance. They do not play a part in transaction control. Delegates can propose changing the size of a block or the amount a witness should be paid in return for validating a block. Once delegates propose such changes, blockchain users vote on whether to adopt them.
+
+      Advantages:
+      1. DPoS blockchains have good protection from double-spending.
+      2. DPoS is more democratic and financially inclusive due to the lesser staking amount required by a user.
+      3. DPoS provides more decentralization as more people take part in the consensus due to a low entry threshold.
+      4. DPoS does not require lots of power to run the network, making it more sustainable.
+      5. Transactions in DPoS are not dependent on computing power required to run the network, hence it is more scalable.
+
+      Disadvantages:
+      1. Effective operation requires delegators to be well informed and appoint honest witnesses.
+      2. A limited number of witnesses can lead to centralization of the network.
+      3. DPoS blockchain is susceptible to problems of weighted voting — users with smaller stakes may refuse to participate, considering their vote insignificant.
     adopters: "EOS, Tron, BitShares"
+    layer1Coins: "EOS (EOS), TRON (TRX), BitShares (BTS), Lisk (LSK), Ark (ARK)"
+    layer2Coins: "None widely adopted"
+    tradeoffs:
+      decentralization:
+        score: 4
+        why: "Only 21–101 elected witnesses produce blocks. While voting is open, power concentrates in the hands of a small elected group — resembling representative democracy rather than true decentralization."
+      immutability:
+        score: 6
+        why: "The small witness set means collusion among a handful of nodes could theoretically reverse recent blocks, though economic and reputational penalties act as deterrents."
+      transparency:
+        score: 8
+        why: "All voting activity, delegate elections and transactions are recorded on-chain and publicly auditable by any token holder in the network."
+      security:
+        score: 6
+        why: "The small fixed validator set reduces the cost of a cartel attack compared to PoW or PoS. A majority of elected witnesses colluding could compromise network integrity."
+
   - slug: "pbft"
     name: "Practical Byzantine Fault Tolerance"
     category: "Permissioned"
     icon: "ShieldCheck"
     shortTagline: "A classic computer science algorithm adapted for enterprise blockchains."
-    hoverDescription: "A state machine replication algorithm that tolerates up to 1/3 of nodes acting maliciously. It requires intense peer-to-peer communication (O(n²)), meaning it only scales to a few dozen known nodes, but provides absolute finality."
+    hoverDescription: "Byzantine Fault Tolerance (BFT) is the feature of a distributed network to reach consensus even when some of the nodes in the network fail to respond or respond with incorrect information. The objective of a BFT mechanism is to safeguard against system failures by employing collective decision-making which aims to reduce the influence of the faulty nodes. BFT is derived from the Byzantine Generals' Problem."
+    detailDescription: |
+      pBFT tries to provide a practical Byzantine state machine replication that can work even when malicious nodes are operating in the system. Nodes in a pBFT enabled distributed system are sequentially ordered with one node being the primary (or the leader node) and others referred to as secondary (or the backup nodes).
+
+      Any eligible node in the system can become the primary by transitioning from secondary to primary (typically in the case of a primary node failure). The goal is that all honest nodes help in reaching a consensus regarding the state of the system using the majority rule.
+
+      A practical Byzantine Fault Tolerant system can function on the condition that the maximum number of malicious nodes must not be greater than or equal to one-third of all the nodes in the system. As the number of nodes increase, the system becomes more secure.
+
+      pBFT consensus rounds are broken into 4 phases:
+      1. The client sends a request to the primary (leader) node.
+      2. The primary (leader) node broadcasts the request to all the secondary (backup) nodes.
+      3. The nodes (primary and secondaries) perform the service requested and then send back a reply to the client.
+      4. The request is served successfully when the client receives 'm+1' replies from different nodes in the network with the same result, where m is the maximum number of faulty nodes allowed.
+
+      The primary (leader) node is changed during every view and can be substituted by a view change protocol if a predefined quantity of time has passed without the leading node broadcasting a request to the backups. If needed, a majority of the honest nodes can vote on the legitimacy of the current leading node and replace it with the next leading node in line.
+
+      Limitations of pBFT:
+      Scalability — the pBFT consensus model works efficiently only when the number of nodes in the distributed network is small due to the high communication overhead that increases exponentially with every extra node. Message complexity is O(n²), meaning it only scales to a few dozen known nodes.
+      Sybil attacks — the pBFT mechanisms are susceptible to Sybil attacks, where one entity controls many identities. As the number of nodes in the network increases, Sybil attacks become increasingly difficult to carry out. But as pBFT mechanisms have scalability issues, pBFT is typically used in combination with other mechanism(s).
+      Scaling — pBFT does not scale well because of its communication overhead. As the number of nodes increases (communication increases as O(n²)), so does the time taken to respond to the request.
     adopters: "Hyperledger Fabric, Zilliqa (hybrid)"
+    layer1Coins: "Zilliqa (ZIL, hybrid pBFT+PoW), Hyperledger Fabric (permissioned enterprise)"
+    layer2Coins: "None — primarily used in enterprise and permissioned networks"
+    tradeoffs:
+      decentralization:
+        score: 2
+        why: "Requires a known, pre-approved set of nodes. New participants cannot join freely, making it fundamentally permissioned and centralized by design — a necessary trade-off for predictable performance."
+      immutability:
+        score: 9
+        why: "Provides absolute finality — once a block is committed through pBFT, it cannot be reversed. There are no forks in a correctly functioning pBFT system, making it highly immutable."
+      transparency:
+        score: 3
+        why: "Typically deployed in private or consortium blockchains where not all participants can read all data. Transparency is controlled by network administrators rather than being publicly open."
+      security:
+        score: 9
+        why: "Mathematically guarantees safety as long as fewer than one-third of nodes are Byzantine. However, this guarantee only holds within the closed, known set of validators — not against external attackers adding new nodes."
+
   - slug: "avalanche-consensus"
     name: "Avalanche Consensus"
     category: "Fast Finality"
     icon: "Snowflake"
     shortTagline: "Nodes repeatedly sub-sample the network to build rapid statistical confidence."
-    hoverDescription: "Instead of asking every node for agreement, a node asks a small, random subset. If the subset agrees, the node adopts that stance. This ripples through the network like an avalanche, reaching global consensus in milliseconds."
+    hoverDescription: "Avalanche consensus is a decentralized agreement protocol where network validators repeatedly poll a small, random subset of other validators to agree on whether a transaction is valid. Like a snowball rolling down a hill, these localized polls rapidly cascade across the network until all nodes reach the exact same conclusion. This approach allows the network to process thousands of transactions per second and achieve permanent, sub-second finality without relying on energy-intensive mining."
+    detailDescription: |
+      When a node is determining whether a transaction should be accepted, it asks a small, random subset of validator nodes for their preference. Each queried validator replies with the transaction that it prefers, or thinks should be accepted.
+
+      If a sufficient majority of the validators sampled reply with the same preferred transaction, this becomes the preferred choice of the validator that inquired. In the future, this node will reply with the transaction preferred by the majority.
+
+      The node repeats this sampling process until the validators queried reply with the same answer for a sufficient number of consecutive rounds.
+
+      Key Parameters:
+      Alpha (α) — the number of validators required to be considered a "sufficient majority".
+      Beta (β) — the number of consecutive rounds required to reach consensus, also known as the "Confidence Threshold".
+      Both α and β are configurable, allowing the network to tune the balance between speed and safety.
+
+      When a transaction has no conflicts, finalization happens very quickly. When conflicts exist, honest validators quickly cluster around conflicting transactions, entering a positive feedback loop until all correct validators prefer that transaction. This leads to the acceptance of non-conflicting transactions and the rejection of conflicting transactions.
+
+      Unlike traditional BFT protocols, Avalanche does not require all-to-all communication (O(n²)). Instead, each node samples only a small subset, achieving near-linear message complexity while still guaranteeing probabilistic safety — making it highly scalable without sacrificing security.
     adopters: "Avalanche (AVAX)"
-  - slug: "proof-of-history"
-    name: "Proof of History (PoH)"
-    category: "High Throughput"
-    icon: "Clock"
-    shortTagline: "A cryptographic clock that proves time passed between two events."
-    hoverDescription: "Uses a high-frequency Verifiable Delay Function (VDF) to create a historical record of events. Validators don't need to wait for network agreement on time, stripping out massive communication overhead and enabling extreme speeds."
-    adopters: "Solana"
-  - slug: "proof-of-authority"
-    name: "Proof of Authority (PoA)"
-    category: "Permissioned"
-    icon: "Key"
-    shortTagline: "Identity is the stake. Known entities are granted the right to validate."
-    hoverDescription: "Validators are pre-approved entities (often companies or institutions) whose real-world reputation is at stake. Because trust is established off-chain, the network can process transactions incredibly fast with almost zero computational cost."
-    adopters: "VeChain, Goerli Testnet"
-  - slug: "proof-of-space"
-    name: "Proof of Space and Time"
+    layer1Coins: "Avalanche (AVAX)"
+    layer2Coins: "Avalanche Subnets (custom application-specific chains on the Avalanche platform)"
+    tradeoffs:
+      decentralization:
+        score: 7
+        why: "Open validator set with no central authority. The random sub-sampling approach prevents any single node from having disproportionate influence over consensus outcomes."
+      immutability:
+        score: 8
+        why: "Sub-second probabilistic finality means blocks become practically irreversible very quickly. The probability of reversal drops exponentially with each consecutive sampling round."
+      transparency:
+        score: 8
+        why: "All transactions are publicly recorded on the Avalanche C-Chain. Validator activity, stake information and network state are fully auditable by anyone."
+      security:
+        score: 8
+        why: "Requires a significant portion of the network to be corrupted to manipulate consensus. The random sub-sampling makes targeted, coordinated attacks statistically impractical at scale."
+
+  - slug: "proof-of-capacity"
+    name: "Proof of Capacity"
     category: "Energy Light"
     icon: "HardDrive"
     shortTagline: "Secures the network using unused hard drive capacity instead of compute."
-    hoverDescription: "Farmers 'plot' cryptographic data on their hard drives. When a new block is needed, the network broadcasts a challenge, and the farmer with the closest matching plot wins. A secondary VDF (Proof of Time) prevents plotting attacks."
-    adopters: "Chia Network"
+    hoverDescription: "Validators are supposed to invest their hard drive space instead of investing in expensive hardware or burning coins. The more hard drive space validators have, the better their chances of getting selected for mining the next block and earning the block reward."
+    detailDescription: |
+      1. Plotting
+      Miners allocate a portion of their hard drive space to create "plots" — files that store pre-computed cryptographic solutions. This initial process can take time and requires storage resources, but it is done only once per miner.
+
+      2. Mining Process
+      When a new block is proposed, miners use their stored plots to quickly search for valid proofs. The more storage space a miner has allocated, the higher their chances of being selected to mine the next block.
+
+      3. Proof Generation
+      Miners generate a proof based on the data in their plots, demonstrating their capability to participate in the consensus process. This proof is then submitted to the network for validation.
+
+      4. Consensus
+      The network employs a consensus mechanism to verify the submitted proofs. Miners with valid proofs are rewarded by having their block added to the blockchain. The process ensures that only legitimate participants can add blocks, maintaining the integrity of the blockchain.
+
+      5. Validation and Block Creation
+      Once a proof is accepted, the block containing the latest transactions is created and added to the blockchain, while the mining reward is distributed to the successful miner.
+
+      Benefits of Proof of Capacity:
+      1. Energy Efficiency — PoC significantly reduces energy consumption compared to Proof of Work, as it relies on disk space rather than intensive computational processes.
+      2. Lower Hardware Costs — participants can use standard consumer hardware and existing storage devices, eliminating the need for expensive specialized mining equipment.
+      3. Accessibility — by lowering the barrier to entry, PoC allows a broader range of individuals to participate in mining, promoting inclusivity and decentralization within the network.
+      4. Enhanced Security — the requirement for significant disk space makes it more challenging for malicious actors to control the network.
+      5. Reduced Centralization Risks — PoC encourages more users to contribute storage capacity, preventing the concentration of mining power in the hands of a few.
+      6. Sustainable Mining — by using existing hardware resources and minimizing energy use, PoC contributes to a more sustainable approach to blockchain technology.
+      7. Quick Proof Generation — the use of pre-computed plots allows for faster proof generation during the mining process.
+
+      Challenges and Limitations:
+      1. Storage Centralization — as more users participate, there is a risk that storage resources may become concentrated among a few large miners, leading to centralization issues similar to those seen in PoW systems.
+      2. Disk Space Wastage — the plotting process can consume significant amounts of disk space, which may lead to inefficient use of resources if the allocated space is not utilized effectively.
+      3. Initial Setup Time — creating plots can be a time-consuming process, requiring considerable initial investment in storage space and system resources.
+      4. Vulnerabilities to Attacks — although PoC improves security, it is still susceptible to certain attacks such as Sybil attacks.
+      5. Limited Adoption — compared to more established consensus mechanisms, PoC is less widely adopted, which can impact the liquidity and value of cryptocurrencies using this method.
+    adopters: "Chia Network, Burstcoin"
+    layer1Coins: "Chia (XCH), Burstcoin (BURST / Signum)"
+    layer2Coins: "None widely adopted"
+    tradeoffs:
+      decentralization:
+        score: 6
+        why: "Anyone with hard drive space can participate, making entry accessible compared to PoW. However, large-scale storage farms can accumulate disproportionate mining power over time."
+      immutability:
+        score: 6
+        why: "Immutability depends on network size. Smaller networks have lower attack costs. Pre-computed plots do not provide the same thermodynamic guarantee of irreversibility as PoW hash calculations."
+      transparency:
+        score: 8
+        why: "All transactions and blocks are publicly recorded and verifiable. Plot commitments are verifiable on-chain, making miner participation and storage contributions fully auditable."
+      security:
+        score: 5
+        why: "The network's security scales with total storage committed. With limited adoption, the cost of a majority storage attack is significantly lower than attacking Bitcoin's hash rate."
+
   - slug: "tendermint-core"
     name: "Tendermint BFT"
     category: "Fast Finality"
     icon: "Network"
     shortTagline: "A deterministic, fast-finality engine powering the 'Internet of Blockchains'."
-    hoverDescription: "A modified DPoS + PBFT hybrid where a known set of validators take turns proposing blocks. It guarantees absolute finality (no forks ever) as long as 2/3 of the voting power is honest. If a chain halts, it favors consistency over availability."
+    hoverDescription: "Tendermint BFT is a Byzantine Fault Tolerant consensus algorithm that enables a blockchain to reach agreement even if up to one-third of validators are faulty or malicious. In each round, a proposer is selected to suggest a new block to the network. Validators verify the proposed block and exchange prevote and precommit messages to indicate their agreement. When at least two-thirds of the validators approve the block, it is permanently committed to the blockchain with immediate finality. If consensus is not reached, a new round begins with a different proposer until agreement is achieved."
+    detailDescription: |
+      Tendermint is an easy-to-understand, mostly asynchronous, BFT consensus protocol. Participants in the protocol are called validators — they take turns proposing blocks of transactions and voting on them.
+
+      Blocks are committed in a chain, with one block at each height. A block may fail to be committed, in which case the protocol moves to the next round, and a new validator gets to propose a block for that height.
+
+      Two stages of voting are required to successfully commit a block — pre-vote and pre-commit. A block is committed when more than 2/3 of validators pre-commit for the same block in the same round.
+
+      When more than two-thirds of the validators pre-vote for the same block, we call that a "polka". Every pre-commit must be justified by a polka in the same round.
+
+      Validators may fail to commit a block for a number of reasons — the current proposer may be offline, or the network may be slow. Tendermint allows them to establish that a validator should be skipped. Validators wait a small amount of time to receive a complete proposal block from the proposer before voting to move to the next round. This reliance on a timeout is what makes Tendermint a weakly synchronous protocol, rather than a fully asynchronous one. However, the rest of the protocol is asynchronous, and validators only make progress after hearing from more than two-thirds of the validator set.
+
+      Tendermint uses the same mechanism to commit a block as it does to skip to the next round — a simplifying and elegant design choice.
+
+      Assuming less than one-third of the validators are Byzantine, Tendermint guarantees that safety will never be violated — validators will never commit conflicting blocks at the same height. To achieve this it introduces locking rules which modulate which paths can be followed in the consensus flow. Once a validator pre-commits a block, it is locked on that block and can only unlock under specific conditions in a subsequent round.
     adopters: "Cosmos, Celestia, Binance Chain"
+    layer1Coins: "Cosmos (ATOM), Celestia (TIA), BNB Chain (BNB), Terra Classic (LUNC)"
+    layer2Coins: "IBC-connected chains via Inter-Blockchain Communication protocol"
+    tradeoffs:
+      decentralization:
+        score: 5
+        why: "Validator sets are typically curated through governance or stake-weighted elections, creating a known, finite set of participants rather than truly permissionless open entry."
+      immutability:
+        score: 9
+        why: "Provides absolute finality — blocks committed by Tendermint are final and irreversible immediately. There are zero forks in a correct Tendermint deployment, the strongest immutability guarantee possible."
+      transparency:
+        score: 7
+        why: "Validator votes, pre-votes and pre-commits are visible on-chain. However, validator selection is often governance-driven, which may introduce opaque off-chain processes."
+      security:
+        score: 9
+        why: "Mathematically guarantees safety as long as less than 1/3 of voting power is Byzantine. If a chain halts, it favors consistency over availability — never committing unsafe blocks."
+
   - slug: "proof-of-burn"
     name: "Proof of Burn (PoB)"
     category: "Energy Light"
     icon: "Flame"
     shortTagline: "Miners destroy cryptocurrency to earn the right to mine new blocks."
-    hoverDescription: "Instead of investing in physical mining rigs (PoW), participants send coins to an unspendable address ('burning' them). This virtual mining rig grants them a proportional chance to mine the next block and earn rewards."
+    hoverDescription: "Proof of Burn (PoB) allows validators to earn mining rights by permanently burning coins, sending them to an unrecoverable address instead of investing in expensive hardware. The more coins a validator burns, the higher their chance of being selected to mine the next block. Although PoB reduces hardware costs compared to Proof of Work, it still wastes resources by destroying coins and tends to favor participants who can afford to burn more."
+    detailDescription: |
+      Proof of Burn (PoB) is a consensus algorithm that allows participants to validate transactions and secure the blockchain by "burning" a portion of their cryptocurrency holdings.
+
+      1. Burning Coins
+      Participants send a specified amount of cryptocurrency to an unspendable address, permanently removing those coins from circulation. This act demonstrates their commitment to the network.
+
+      2. Earning Mining Rights
+      By burning coins, participants earn the right to mine new blocks. The amount of cryptocurrency burned typically influences their chances of being selected for mining.
+
+      3. Block Creation
+      When a participant is chosen to mine a block, they validate transactions and create a new block, which is then added to the blockchain.
+
+      4. Rewards Distribution
+      The successful miner receives rewards, often in the form of newly created coins or transaction fees, directly linked to the amount of cryptocurrency burned.
+
+      5. Enhanced Security
+      The commitment involved in burning coins helps secure the network, as participants have a vested interest in maintaining the integrity and health of the blockchain.
+
+      Benefits of Proof of Burn:
+      1. Resource Efficiency — PoB requires significantly less energy than Proof of Work, as it does not involve intensive computational tasks. This makes it a more environmentally friendly consensus mechanism.
+      2. Decentralization — PoB reduces the risks of centralization by tying mining rights to the act of burning coins rather than wealth accumulation, encouraging broader participation.
+      3. Long-Term Commitment — participants demonstrate their investment in the network by permanently removing coins from circulation, discouraging malicious behavior and promoting a stable network environment.
+      4. Simplified Validation — the validation process is more straightforward, leading to faster block confirmations compared to PoW.
+      5. Economic Stability — burning coins can help control the cryptocurrency supply, potentially increasing its value over time and contributing to overall economic stability.
+
+      Challenges and Limitations:
+      1. Economic Waste — burning coins is often seen as wasteful since participants permanently lose their investment without any return, which may deter involvement.
+      2. Reduced Liquidity — the process of burning decreases the total supply of the cryptocurrency, potentially leading to reduced market liquidity and instability.
+      3. Incentive Structure — the rewards for burning coins may not be compelling enough for some users, limiting participation compared to more lucrative consensus mechanisms.
+      4. Market Manipulation — large holders could manipulate the system by burning significant amounts of coins to gain excessive mining influence, threatening decentralization.
+      5. Limited Adoption — PoB is not as widely adopted as Proof of Work or Proof of Stake, which can hinder the development of a robust ecosystem.
     adopters: "Slimcoin, Counterparty"
+    layer1Coins: "Slimcoin (SLM), Counterparty (XCP)"
+    layer2Coins: "None widely adopted"
+    tradeoffs:
+      decentralization:
+        score: 6
+        why: "Open to any participant willing to burn coins, but wealthy participants who can afford to burn more coins gain disproportionate mining influence over time, risking gradual centralization."
+      immutability:
+        score: 5
+        why: "With limited network adoption, the total value burned across the network is relatively low. This reduces the economic barrier to mounting a majority attack and rewriting recent history."
+      transparency:
+        score: 8
+        why: "Coin burns are fully verifiable on-chain — anyone can confirm that coins were sent to an unspendable address, making the entire commitment process completely transparent and auditable."
+      security:
+        score: 5
+        why: "Security scales with the total value burned across the network. With limited adoption, the economic barrier to a majority attack is far lower than in well-established PoW or PoS systems."

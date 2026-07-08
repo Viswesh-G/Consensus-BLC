@@ -1,66 +1,47 @@
 'use client';
 
 /**
- * AlgorithmDetailPage client wrapper — adds interactive entry animations
- * and animated trilemma radar chart for the detail page.
+ * AlgorithmDetailPage client wrapper — adds interactive entry animations,
+ * data-driven tradeoff visualization, coins used, and the full detail description.
  */
 
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Coins, Layers } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
-import { type AlgorithmEntry } from '@/lib/content';
+import { type AlgorithmEntry, type TradeoffDetail } from '@/lib/content';
 import { Badge } from '@/components/ui/badge';
 
-interface TrilemmaScore {
-  decentralization: number; // 0–10
-  security: number;
-  scalability: number;
-}
-
-/** Static trilemma scores per slug — intentionally opinionated trade-off mapping */
-const TRILEMMA_MAP: Record<string, TrilemmaScore> = {
-  'proof-of-work': { decentralization: 9, security: 10, scalability: 2 },
-  'proof-of-stake': { decentralization: 7, security: 8, scalability: 6 },
-  'delegated-proof-of-stake': { decentralization: 4, security: 6, scalability: 9 },
-  'pbft': { decentralization: 2, security: 9, scalability: 5 },
-  'avalanche-consensus': { decentralization: 7, security: 8, scalability: 9 },
-  'proof-of-history': { decentralization: 5, security: 7, scalability: 10 },
-  'proof-of-authority': { decentralization: 1, security: 5, scalability: 10 },
-  'proof-of-space': { decentralization: 6, security: 6, scalability: 5 },
-  'tendermint-core': { decentralization: 5, security: 9, scalability: 7 },
-  'proof-of-burn': { decentralization: 6, security: 5, scalability: 4 },
-};
-
-/** Animated bar for the trilemma visualization */
-function TrilemmaBar({
+/** Animated bar for a single tradeoff metric */
+function TradeoffBar({
   label,
-  value,
+  detail,
   color,
   delay,
 }: {
   label: string;
-  value: number;
+  detail: TradeoffDetail;
   color: string;
   delay: number;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3 p-5 rounded-xl bg-bg-subtle border border-border-base">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold font-sans text-fg-muted">{label}</span>
+        <span className="text-sm font-bold font-sans text-fg-base">{label}</span>
         <span className="text-sm font-bold font-display" style={{ color }}>
-          {value}/10
+          {detail.score}/10
         </span>
       </div>
-      <div className="h-2 rounded-full bg-bg-subtle overflow-hidden">
+      <div className="h-2 rounded-full bg-bg-base overflow-hidden">
         <motion.div
           className="h-full rounded-full"
           style={{ background: color }}
           initial={{ width: 0 }}
-          animate={{ width: `${value * 10}%` }}
+          animate={{ width: `${detail.score * 10}%` }}
           transition={{ duration: 1, delay, ease: [0.22, 1, 0.36, 1] }}
         />
       </div>
+      <p className="text-xs font-sans text-fg-muted leading-relaxed">{detail.why}</p>
     </div>
   );
 }
@@ -73,13 +54,14 @@ interface Props {
     placeholderHeading: string;
     placeholderBody: string;
     adoptersHeading: string;
+    coinsHeading: string;
+    tradeoffsHeading: string;
     exploreMoreHeading: string;
   };
 }
 
 export function AlgorithmDetailClient({ algorithm, related, content }: Props) {
   const IconComponent = (LucideIcons as any)[algorithm.icon] || LucideIcons.HelpCircle;
-  const trilemma = TRILEMMA_MAP[algorithm.slug] ?? { decentralization: 5, security: 5, scalability: 5 };
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-base text-fg-base">
@@ -151,39 +133,97 @@ export function AlgorithmDetailClient({ algorithm, related, content }: Props) {
 
       <main className="flex-1 px-6 max-w-4xl mx-auto w-full flex flex-col gap-12 pb-24">
 
-        {/* ── Trilemma Trade-off Visualization ── */}
+        {/* ── How It Works (Detail Description) ── */}
         <motion.section
-          className="bg-bg-card border border-border-base rounded-2xl p-8 flex flex-col gap-6"
+          className="bg-bg-card border border-border-base rounded-2xl p-8"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
+          <p className="text-xs font-semibold uppercase tracking-widest text-fg-subtle mb-4">
+            How it works
+          </p>
+          <p className="text-base text-fg-base font-sans leading-relaxed whitespace-pre-line">
+            {algorithm.detailDescription}
+          </p>
+        </motion.section>
+
+        {/* ── Trade-off Analysis ── */}
+        <motion.section
+          className="bg-bg-card border border-border-base rounded-2xl p-8 flex flex-col gap-6"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-fg-subtle mb-1">
-              Blockchain Trilemma Scores
+              {content.tradeoffsHeading}
             </p>
             <h2 className="text-xl font-display font-bold text-fg-base">
-              Trade-off Profile
+              Decentralization · Immutability · Transparency · Security
             </h2>
+            <p className="text-sm text-fg-muted mt-1">
+              How this mechanism performs across the four core blockchain properties — and why.
+            </p>
           </div>
-          <div className="flex flex-col gap-4">
-            <TrilemmaBar label="Decentralization" value={trilemma.decentralization} color="oklch(57% 0.18 264)" delay={0.4} />
-            <TrilemmaBar label="Security" value={trilemma.security} color="oklch(55% 0.18 145)" delay={0.5} />
-            <TrilemmaBar label="Scalability" value={trilemma.scalability} color="oklch(58% 0.18 25)" delay={0.6} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <TradeoffBar
+              label="Decentralization"
+              detail={algorithm.tradeoffs.decentralization}
+              color="oklch(57% 0.18 264)"
+              delay={0.45}
+            />
+            <TradeoffBar
+              label="Immutability"
+              detail={algorithm.tradeoffs.immutability}
+              color="oklch(55% 0.18 145)"
+              delay={0.5}
+            />
+            <TradeoffBar
+              label="Transparency"
+              detail={algorithm.tradeoffs.transparency}
+              color="oklch(60% 0.18 60)"
+              delay={0.55}
+            />
+            <TradeoffBar
+              label="Security"
+              detail={algorithm.tradeoffs.security}
+              color="oklch(58% 0.18 25)"
+              delay={0.6}
+            />
           </div>
         </motion.section>
 
-        {/* ── Description ── */}
+        {/* ── Layer 1 & Layer 2 Coins ── */}
         <motion.section
           className="bg-bg-card border border-border-base rounded-2xl p-8"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-fg-subtle mb-3">How it works</p>
-          <p className="text-lg text-fg-base font-sans leading-relaxed">
-            {algorithm.hoverDescription}
+          <p className="text-xs font-semibold uppercase tracking-widest text-fg-subtle mb-4">
+            {content.coinsHeading}
           </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-fg-muted mb-1">
+                <Layers size={16} strokeWidth={1.5} />
+                <span className="text-xs font-bold uppercase tracking-wider">Layer 1</span>
+              </div>
+              <p className="text-sm font-sans text-fg-base leading-relaxed">
+                {algorithm.layer1Coins}
+              </p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-fg-muted mb-1">
+                <Coins size={16} strokeWidth={1.5} />
+                <span className="text-xs font-bold uppercase tracking-wider">Layer 2</span>
+              </div>
+              <p className="text-sm font-sans text-fg-base leading-relaxed">
+                {algorithm.layer2Coins}
+              </p>
+            </div>
+          </div>
         </motion.section>
 
         {/* ── Adopters ── */}
@@ -191,7 +231,7 @@ export function AlgorithmDetailClient({ algorithm, related, content }: Props) {
           className="bg-bg-card border border-border-base rounded-xl p-8"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.45, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
         >
           <h3 className="text-sm font-bold uppercase tracking-widest text-fg-muted mb-2">
             {content.adoptersHeading}
@@ -207,7 +247,7 @@ export function AlgorithmDetailClient({ algorithm, related, content }: Props) {
             className="text-2xl font-display font-bold"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.55 }}
+            transition={{ duration: 0.4, delay: 0.5 }}
           >
             {content.exploreMoreHeading}
           </motion.h3>
@@ -219,7 +259,7 @@ export function AlgorithmDetailClient({ algorithm, related, content }: Props) {
                   key={rel.slug}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.6 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.4, delay: 0.55 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <Link
                     href={`/algorithms/${rel.slug}`}

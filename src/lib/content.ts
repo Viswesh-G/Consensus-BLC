@@ -8,14 +8,32 @@ export interface OverviewStat {
   detail: string;
 }
 
+export interface TradeoffDetail {
+  score: number; // 0–10
+  why: string;
+}
+
+export interface AlgorithmTradeoffs {
+  decentralization: TradeoffDetail;
+  immutability: TradeoffDetail;
+  transparency: TradeoffDetail;
+  security: TradeoffDetail;
+}
+
 export interface AlgorithmEntry {
   slug: string;
   name: string;
   category: string;
   icon: string;
   shortTagline: string;
+  /** Short text shown on hover in the card grid */
   hoverDescription: string;
+  /** Full detailed explanation shown on the algorithm detail page */
+  detailDescription: string;
   adopters: string;
+  layer1Coins: string;
+  layer2Coins: string;
+  tradeoffs: AlgorithmTradeoffs;
 }
 
 export interface SiteContent {
@@ -44,21 +62,17 @@ export interface SiteContent {
     placeholderHeading: string;
     placeholderBody: string;
     adoptersHeading: string;
+    coinsHeading: string;
+    tradeoffsHeading: string;
     exploreMoreHeading: string;
   };
   algorithms: AlgorithmEntry[];
 }
 
-let cachedContent: SiteContent | null = null;
-
 export function getContent(): SiteContent {
-  if (cachedContent) return cachedContent;
-  
   const filePath = path.join(process.cwd(), 'content.yml');
   const fileContents = fs.readFileSync(filePath, 'utf8');
-  cachedContent = yaml.parse(fileContents) as SiteContent;
-  
-  return cachedContent;
+  return yaml.parse(fileContents) as SiteContent;
 }
 
 // Keep a helper for algorithms specifically to easily replace algorithmsData imports
